@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+def usage
+  $stderr.puts "Usage: git rev-list v2.4...v2.5 | #$0 example/github_repo > CHANGELOG.md"
+  exit 1
+end
+
+if ARGV.length != 1 || /[-_\w]+\/[-_.\w]+/ !~ ARGV[0] || $stdin.isatty
+  usage
+end
+
+commits = $stdin.read.split
+
+if commits.empty?
+  usage
+end
+
+output = $stdout
+logger = output.isatty ? File.open(File::NULL, "w") : $stderr
+
+project = ARGV[0]
+owner, name = project.split('/', 2)
+
+def format_pull(pull)
+  <<~MD
+    - #{pull.title} [\##{pull.number}](#{pull.url}) ([#{pull.author.login}](#{pull.author.url}))
+  MD
+end
+
+require 'github_fast_changelog'
+
+logger.puts "Generating changelog"
+GithubFastChangelog.each_pull_request(owner: owner, name: name) do |pull|
+  in_release = pull.merge_commit && commits.include?(pull.merge_commit.oid)
+  if in_release
+    md = format_pull(pull)
+    output.puts(md)
+    logger << "#"
+  else
+    logger << "."
+  end
+  logger.flush
+end
+logger.puts ""
