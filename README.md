@@ -1,28 +1,24 @@
 # GithubFastChangelog
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/github_fast_changelog`. To experiment with that code, run `bin/console` for an interactive prompt.
+Uses GitHub's v4 GraphQL API to generate a CHANGELOG from PRs matching a list of commits.
 
-TODO: Delete this and the text above, and describe your gem
+I used to use [GitHub Changelog
+Generator](https://github.com/github-changelog-generator/github-changelog-generator)
+(which is a better and way more complete project), but the project I worked on
+was too large (several thousand PRs) and always hit github's rate limit.
+
+This project uses GitHub's v4 GraphQL API to query the PRs very efficiently and shouldn't ever hit the rate limit
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'github_fast_changelog'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install github_fast_changelog
 
 ## Usage
 
-TODO: Write usage instructions here
+This expects a list of commits (some of which should match the merge commit of a PR) on STDIN. Writes markdown to STDOUT.
+
+    $ export GITHUB_ACCESS_TOKEN=....
+    $ git rev-list v2.4...v2.5 | github_fast_changelog example/github_repo > CHANGELOG.md
 
 ## Development
 
