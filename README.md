@@ -20,6 +20,18 @@ This expects a list of commits (some of which should match the merge commit of a
     $ export GITHUB_ACCESS_TOKEN=....
     $ git rev-list v2.4...v2.5 | github_fast_changelog example/github_repo > CHANGELOG.md
 
+
+Output is:
+
+```
+- Add usage instructions to README [#1](https://github.com/jhawthorn/github_fast_changelog/pull/1) ([jhawthorn](https://github.com/jhawthorn))
+```
+
+Rendered:
+
+- Add usage instructions to README [#1](https://github.com/jhawthorn/github_fast_changelog/pull/1) ([jhawthorn](https://github.com/jhawthorn))
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

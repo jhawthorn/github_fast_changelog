@@ -16,7 +16,7 @@ module GithubFastChangelog
   Schema = GraphQL::Client.load_schema(HTTP)
   Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
 
-  MergedPullsQuery = Client::Client.parse <<-GRAPHQL
+  MergedPullsQuery = Client.parse <<-GRAPHQL
     query($before: String, $owner: String!, $name: String!) {
       repository(owner: $owner, name: $name) {
         name
@@ -48,7 +48,7 @@ module GithubFastChangelog
     }
   GRAPHQL
 
-  def each_pull_request(owner:, name:)
+  def self.each_pull_request(owner:, name:)
     cursor = nil
     loop do
       result = Client.query(MergedPullsQuery, variables: {
